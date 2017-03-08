@@ -5,7 +5,7 @@
 Monthly precipitation Meta.
 }
 \description{
-Records of 102 pluviometrics station of the 'Instituto de Hidrologia, Meteorologia y Estudios Ambientales de Colombia' (IDEAM), to the west of hidrological zone Meta river. Every station has 37 records of the precipitation monthly from january 2007 to january 2010.
+Records of 102 pluviometrics station of the 'Instituto de Hidrologia, Meteorologia y Estudios Ambientales de Colombia' (IDEAM), to the west of hidrological zone Meta river. Every station has 121 records of the precipitation monthly from january 2000 to january 2010.
 }
 \usage{data(Metadb)}
 \format{

@@ -1,5 +1,7 @@
-#' @export 
-#' 
+#' @importFrom graphics layout legend stripchart
+#' @importFrom stats ts.plot
+#' @export
+#'
 print.plot.MedianPolishM <-
 function(x,...)
 {
@@ -28,14 +30,14 @@ COLORS <-c(rep("black",x$iter-1),"red")
 LTY <-c(rep(2,x$iter-1),1)
 Thick <-c(rep(1,x$iter-1),2)
 
-TEF<-c("x","y","z","Time")
+TEF<-c("Longitude","Latitude","Altitude","Time")
 
 for(i in 1:4){
 ts.plot(t(x[[i]]),xlab="Intervals", ylab="Effect",
 main=paste(TEF[i]," effect"),col=COLORS,lty=LTY,lwd=Thick)
 }
 plot(1, type = "n", axes = FALSE,xlab="",ylab="")
-legend("bottom", cex=1.2,pt.cex=3,title="Legend",  bty = "n",
+legend("bottom", cex=1,pt.cex=3,  bty = "n",
        legend=c( "Iterations","Convergence"),col=c("black","red"), lty=c(2,1),lwd=c(1,2))
 }
 }

@@ -1,18 +1,23 @@
 #' Median polish Spline.
 #'
-#' The "splineMPST" is dessigned to represent the variability of effects of spatio - temporal data on a surface, from robust median polish algoritm and planar interpolation.
+#' The "splineMPST" is designed to represent the variability of spatio - temporal effects on a surface, from robust median polish algorithm and planar interpolation.
 #' @usage splineMPST(Grid,Ef_t,MPST,eps, maxiter)
 #' @param Grid grid with the coordinates in space "x", "y", "z", where will be viewed trend.
-#' @param Ef_t it's the temporal scenary to look trend.
+#' @param Ef_t temporal scenary to look trend.
 #' @param MPST object of class \code{\link{ConstructMPst}}.
 #' @param eps real number greater than \code{0}, default 0.01. A tolerance for convergence.
 #' @param maxiter the maximum number of iterations, default 10.
 #' @return Data frame, where columns show the trend in each spatio - temporal location.
+#' @references Martínez, W. A., Melo, C. E., & Melo, O. O. (2017). \emph{Median Polish Kriging for space--time analysis of precipitation} Spatial Statistics, 19, 1-20. \href{http://www.sciencedirect.com/science/article/pii/S2211675316301336}{[link]}
 #' @references Berke, O. (2001). \emph{Modified median polish kriging and its application to the wolfcamp - aquifer data.} Environmetrics, 12(8):731-748.\href{http://onlinelibrary.wiley.com/doi/10.1002/env.495/abstract}{[link]}
-#' @references Cressie, N. (1993). \emph{Statistics for spatial data.} Wiley series in probability and statistics.\href{http://www.wiley.com/WileyCDA/WileyTitle/productCd-1119115183.html}{[link]}
-#' @examples 
+#' @examples
 #' ## Not run:
+#' library(zoo)
+#' library(sp)
+#' library(spacetime)
 #' data(Metadb)
+#' #records of monthly precipitation from january 2007 to january 2010
+#' Metadb<-Metadb[,c(1:4,89:125)]
 #' x<-matrix(0,1,37)
 #' for(i in 1:37){
 #'  x[,i] <- 2007 + (seq(0, 36)/12)[i]
@@ -22,44 +27,45 @@
 #' length(time)
 #'
 #' MPST<-ConstructMPst(Metadb[,-c(1:4)],time,pts=Metadb[,2:4],Delta=c(7,6,5))
-#' 
-#' MpSTData<-MedianPolishM(MPST,eps=0, maxiter=5, na.rm=TRUE)
 #'
+#' MpSTData<-MedianPolishM(MPST,eps=0, maxiter=2, na.rm=TRUE)
+#' plot(MpSTData)
 #' data(DemMeta)
 #' xy = SpatialPoints(Metadb[,2:4],CRS(proj4string(DemMeta)))
 #'
 #' data(HZRMeta)
-#' proj4string(HZRMeta)<-CRS(proj4string(DemMeta))
 #'
 #' polygon1 = polygons(HZRMeta)
-#' Gridxy<- spsample(polygon1, cellsize=2000, n=300,"regular")
+#' Gridxy<- spsample(polygon1, cellsize=3000, n=300,"regular")
 #'
 #' Grid<-data.frame(Gridxy,over(Gridxy,DemMeta))
 #' colnames(Grid)<-c("East", "North","height")
 #'
-#' TendenciaGrilla<-splineMPST(Grid,Ef_t=time[10:15],MPST,eps=0.01, maxiter=2)
-#' 
-#' IDs = paste("ID",1:length(TendenciaGrilla[,5]))
+#' TendenciaGrilla<-splineMPST(Grid,Ef_t=time[16:21],MPST,eps=0.01, maxiter=2)
+#'
+#' IDs = paste("ID",1:nrow(TendenciaGrilla))
 #' mydata = data.frame(values = TendenciaGrilla[,5], ID=IDs)
 
-#' wind.ST1 = STFDF(SpatialPixels(Gridxy),time[10:15],mydata)
+#' wind.ST1 = STFDF(SpatialPixels(Gridxy),time[16:21],mydata)
 #' stplot(wind.ST1,col.regions=bpy.colors(40),par.strip.text = list(cex=0.7)
 #'       ,main="Spline median polish: Monthly Precipitation")
 #' ## End(Not run)
 #' @importFrom spacetime STFDF stplot
+#' @importFrom sp spsample
 #' @importFrom maptools readShapePoly
-#' @importFrom zoo as.Date
-#' @importFrom zoo as.yearmon  
-#' @export 
+#' @importFrom zoo as.yearmon
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats na.omit
+#' @export
 
 splineMPST <-
 function(Grid,Ef_t,MPST,eps=0.01, maxiter=10L){
 
-if (dim(Grid)[2]!=3) 
+if (dim(Grid)[2]!=3)
 stop("The interpolate grid must have 3 dimensions (x,y,z)")
-if (class(MPST)!="ConstructMPst") 
+if (class(MPST)!="ConstructMPst")
 stop("The MpSTData must be a a class MedianPolishM")
-if (length(na.omit(Grid[,3]))!=length(Grid[,3])) 
+if (length(na.omit(Grid[,3]))!=length(Grid[,3]))
   stop("The are NAs in Grid")
 
 MpSTData<-MedianPolishM.default(MPST$Value, eps, maxiter, na.rm=TRUE)
@@ -103,7 +109,7 @@ GridReal<-rbind(as.matrix(Grid[,]),as.matrix(pts[,]))
         #Remplazo de Minimos
         for(j in 1:length(Delta)){
         VDelta2[[j]][1] <- MinGrid[j]-0.1}
-   
+
         #Remplazo de Maximos
         for(j in 1:length(Delta)){
         VDelta2[[j]][ length(VDelta2[[j]]) ] <- MaxGrid[j]+0.1}

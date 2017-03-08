@@ -9,13 +9,13 @@ Digital elevation model with resolution 250 meters of Hydrogeological zone west 
 }
 \usage{data(DemMeta)}
 \format{
-  The format is:
-Formal class 'SpatialGridDataFrame' [package "sp"] 
+Formal class: 'SpatialGridDataFrame' [package "sp"]
 }
 \source{
-\url{http://gdem.ersdac.jspacesystems.or.jp/search.jsp}
+\url{http://www.jspacesystems.or.jp/ersdac/GDEM/E/index.html}
 }
 \examples{
+library(sp)
 data(DemMeta)
 Gridxy<- spsample(DemMeta, cellsize=2000, n=300,"regular")
 plot(Gridxy)

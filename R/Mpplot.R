@@ -1,32 +1,39 @@
-#' Traces of the space. 
+#' Traces of the space.
 #'
-#' Plot of three - dimensional perspective spatial, divides every window into quadrats defined for delta (see \code{\link{ConstructMPst}}) and counts the numbers of points in each quadrat. 
+#' Visualization of the spatial distribution according with three perspectives. Each face has the distribution for trace x, y and z (see \code{\link{ConstructMPst}}).
 #' @param MpData object of class ConstructMPst.
-#' @return Graphic in three perspectives the space data "x", "y", "z" with divisions that containing the number of points in each quadrat.
-#' @examples data(Metadb)
+#' @return Graphic of the three perspectives for space data "x", "y", "z", with divisions that contain the number of points in each quadrat.
+#' @examples
+#' library(zoo)
+#' data(Metadb)
+#' #records of monthly precipitation from january 2007 to january 2010
+#' Metadb<-Metadb[,c(1:4,89:125)]
 #' x<-matrix(0,1,37)
 #' for(i in 1:37){
 #'  x[,i] <- 2007 + (seq(0, 36)/12)[i]
 #' }
 #' x<-as.Date (as.yearmon(x), frac = 1)
 #' time = as.POSIXct(x, tz = "GMT")
-#' 
+#'
 #' MPST<-ConstructMPst(Metadb[,-c(1:4)],time,pts=Metadb[,2:4],Delta=c(7,6,5))
 #' Mpplot(MPST)
+#'
 #' @importFrom graphics points
-#' @importFrom sp Polygon 
+#' @importFrom sp Polygon
 #' @importFrom sp SpatialPolygons
 #' @importFrom sp SpatialPoints
 #' @importFrom sp over
 #' @importFrom sp Polygons
-#' @importFrom zoo as.Date
-#' @importFrom zoo as.yearmon 
+#' @importFrom sp plot
+#' @importFrom zoo as.yearmon
+#' @importFrom graphics layout text axis mtext 
+#'
 #' @export
 
 Mpplot <-
 function(MpData){
 
-if (class(MpData) != "ConstructMPst" ) 
+if (class(MpData) != "ConstructMPst" )
 stop("MpData must be a class ConstructMPst")
 
 space<-MpData$pts

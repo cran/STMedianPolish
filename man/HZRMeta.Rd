@@ -16,6 +16,7 @@ Formal class 'SpatialPolygonsDataFrame' [package "sp"]
 \url{http://www.arcgis.com/home/item.html?id=103b63dcc9f448acbd63f22b728b1a02}
 }
 \examples{
+library(sp)
 data(HZRMeta)
 Gridxy<- spsample(HZRMeta, cellsize=2000, n=300,"regular")
 plot(Gridxy)

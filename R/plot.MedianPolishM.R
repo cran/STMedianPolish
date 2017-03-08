@@ -4,7 +4,9 @@
 #' @method plot MedianPolishM
 #' @param x object of class MedianPolishM.
 #' @param \dots ignored.
-#' @details The object of class MedianPolish has a list of components of effects that allow to graphic after each iterations, the behavior of this components. If the medianpolish is apply to data of class ConstructutMPst, this method has a specific graphic for data with space - time variability.
+#' @details The object of class MedianPolish has a list of the contributions of every effect over data. The graphic shows for each iteration, the behavior of these components. If the median polish is applied to data of class ConstructutMPst, this method has a specific graphic for data with space - time variability.
+#'
+#' @references Martínez, W. A., Melo, C. E., & Melo, O. O. (2017). \emph{Median Polish Kriging for space--time analysis of precipitation} Spatial Statistics, 19, 1-20. \href{http://www.sciencedirect.com/science/article/pii/S2211675316301336}{[link]}
 #' @references Hoaglin, D. C., Mosteller, F., & Tukey, J. W. (Eds.). (2011). \emph{Exploring data tables, trends, and shapes} (Vol. 101). John Wiley & Sons.\href{http://www.wiley.com/WileyCDA/WileyTitle/productCd-047004005X.html}{[link]}
 #' @examples A<-MedianPolishM(UCBAdmissions, eps=0.1, maxiter=2, na.rm=TRUE)
 #' plot(A)
